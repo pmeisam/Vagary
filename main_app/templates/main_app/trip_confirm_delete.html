@@ -1,20 +1,26 @@
 {% extends 'base.html' %}
 
 {% block body%}
-<body>
+<body class = 'bg-image'>
 {% endblock %}
 
 {% block content %} 
-    <h2>Delete Trip</h2>
-    <h3>Are you sure you want to delete <span>{{ object.name }}</span>?</h3>
-    <form action="" method="POST">
-        {% csrf_token%}
-        <input type="submit" value="Yes - Delete!" class="btn btn-danger">
-        <a href="/trips/">Cancel</a>
-    </form>
+<br><br><br><br><br><br>
+
+<div class = "col-6 offset-3">
+    <div class = "card text-center">
+        <h2 class = "card-header">Delete Trip</h2>
+        <h3>Are you sure you want to delete your <span>{{ object.name }}</span> trip?</h3>
+        <form action="" method="POST">
+            {% csrf_token%}
+            <input type="submit" value="Yes - Delete!" class="btn btn-danger">
+            <a href="/trips/">Cancel</a>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
 
 {% block footer %}
-    <div id = "home-footer" class="card-footer text-muted">
+    <div class="home-footer card-footer text-muted">
 {% endblock %}
