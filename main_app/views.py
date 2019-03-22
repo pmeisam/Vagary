@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth import authenticate, login
 import os
 import requests
-from datetime import datetime
+from datetime import datetime, date
 from .models import Trip, Hotel, Flight, User, Suitcase
 from .forms import LuggageForm
 
@@ -63,29 +63,37 @@ def destinations(request):
     origin = request.POST.get('origin')
     d_date = request.POST.get('d_date')
     budget = float(request.POST.get('budget'))
+    print(date.today())
+    check_date = datetime.strptime(d_date, '%Y-%m-%d').date()
+
+    # if status_code == 500:
+    #     error_msg = "Whoops! That location isn't currently supported, please try again!"
     
     if request.user.is_authenticated:
         trip = Trip(budget=budget, user=request.user, origin=origin)
         trip.save()
     else:
         return redirect('login')
-
-    search_list = amadeus.shopping.flight_destinations.get(
-        origin=origin,
-        departureDate=d_date
-        ).data
-    destinations = []
-    for destination in search_list:
-        d_price = float(destination['price']['total'])
-        if d_price <= budget/2:
-            destinations.append(destination)
-    return render(request, 'destinations/search.html', {
+    
+    try: 
+        search_list = amadeus.shopping.flight_destinations.get(
+            origin=origin,
+            departureDate=d_date
+            ).data
+        destinations = []
+        for destination in search_list:
+            d_price = float(destination['price']['total'])
+            if d_price <= budget/2:
+                destinations.append(destination)
+        return render(request, 'destinations/search.html', {
         'destinations': destinations, 
         'budget': budget, 'origin': origin, 
         'departure_date':d_date, 
         "trip": trip,
         'iata': res
         })
+    except: 
+        return render(request, 'error.html')
 
 def hotel_search(request, trip_id, airport_code):
     budget = float(request.POST.get('budget'))
@@ -140,6 +148,7 @@ def flight_add(request, trip_id, airport_code):
         origin = origin,
         trip = trip,
         )
+
     if trip.origin == airport_code:
         return redirect(f'/trips/{trip.id}/{airport_code}')
     else: 
