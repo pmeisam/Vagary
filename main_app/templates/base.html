@@ -31,18 +31,18 @@
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse" id="navbarNav" >
+            <ul class="navbar-nav" style="margin-left: auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'about' %}">About<span class="sr-only">(current)</span></a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'view_trips' %}">Trips List</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create_trip' %}">Create Trips</a>
-                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Sign Out</a>
                 </li>

@@ -5,175 +5,169 @@
 <body>
     {% endblock %}
     {% block content %}
-<div class = "row">
-    <div class="col-6">
-        <div class="card-body text-center">
-            <h1 class="card-header trip-header">{{trip.name}}</h1>
-            <br>
-            <!-- {% if depart_flight %} -->
-            <div class='row'>
-                <div class='col-6'>
-                    {% for i in iata %}
-                    {% if i.code == depart_flight.destination %}
-                    <h4>Flight to {{i.name}}</h4>
-                    {%endif%}
-                    {%endfor%}
-                    <h5>{{depart_flight.departure_date}} from {{depart_flight.origin}}</h5>
+    <div class="row">
+        <div class="col-6">
+            <div class="card-body text-center">
+                <h1 class="card-header trip-header">{{trip.name}}</h1>
+                <br>
+                <div class='row'>
+                    <div class='col-6'>
+                        {% for i in iata %}
+                        {% if i.code == depart_flight.destination %}
+                        <h4>Flight to {{i.name}}</h4>
+                        {%endif%}
+                        {%endfor%}
+                        <h5>{{depart_flight.departure_date}} from {{depart_flight.origin}}</h5>
+                    </div>
+                    <div class='col-6'>
+                        <h4>Price</h4>
+                        <h5>${{depart_flight.price|floatformat:2}}</h5>
+                    </div>
                 </div>
-                <div class='col-6'>
-                    <h4>Price</h4>
-                    <h5>${{depart_flight.price|floatformat:2}}</h5>
-                </div>
-            </div>
-            <div class='row'>
-                {% if return_flight %}
-                <div class='col-6'>
-                    {% for i in iata %}
-                    {% if i.code == return_flight.destination %}
-                    <h4>Flight to {{i.name}}</h4>
-                    {%endif%}
-                    {%endfor%}
-                    <h5>{{return_flight.departure_date}} from {{return_flight.origin}}</h5>
-                </div>
-                <div class='col-6'>
-                    <h4>Price</h4>
-                    <h5>${{return_flight.price|floatformat:2}}</h5>
-                </div>
-                {% else %}
-                <div class='col-12 text-center'>
-                    <form action="/{{trip.id}}/{{depart_flight.origin}}/flights/" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="budget" value="{{trip.budget}}">
-                        <input type="hidden" name="origin" value="{{depart_flight.destination}}">
-                        <input type="date" class="form-control" name="return_date" aria-describedby="basic-addon1"
-                            required>
-                        <input type="submit" value="Add Returning Flight" class="btn btn-light">
-                    </form>
-                </div>
-                {% endif %}
-            </div>
-            <div class='row'>
-                {% if hotel %}
-                <div class="col-6">
-                    <h4>Hotel</h4>
-                    <h5 class="text-left">{{hotel.name}}</h5>
-                    <p class="text-left">{{hotel.address}}</p>
-                </div>
-                <div class='col-6'>
-                    <h4>Price</h4>
-                    <h5>${{hotel.price|floatformat:2}}</h5>
-                </div>
-                {% else %}
-                <div class='col-12 text-center'>
-                    <form action="/{{trip.id}}/{{depart_flight.destination}}/hotels/" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="budget" value="{{trip.budget}}">
-                        <input type="submit" value="Add Hotel" class="btn btn-light">
-                    </form>
+                <div class='row'>
+                    {% if return_flight %}
+                    <div class='col-6'>
+                        {% for i in iata %}
+                        {% if i.code == return_flight.destination %}
+                        <h4>Flight to {{i.name}}</h4>
+                        {%endif%}
+                        {%endfor%}
+                        <h5>{{return_flight.departure_date}} from {{return_flight.origin}}</h5>
+                    </div>
+                    <div class='col-6'>
+                        <h4>Price</h4>
+                        <h5>${{return_flight.price|floatformat:2}}</h5>
+                    </div>
+                    {% else %}
+                    <div class='col-12 text-center'>
+                        <form action="/{{trip.id}}/{{depart_flight.origin}}/flights/" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="budget" value="{{trip.budget}}">
+                            <input type="hidden" name="origin" value="{{depart_flight.destination}}">
+                            <input type="date" class="form-control" name="return_date" aria-describedby="basic-addon1"
+                                required>
+                            <input type="submit" value="Add Returning Flight" class="btn btn-light">
+                        </form>
+                    </div>
                     {% endif %}
                 </div>
+                <div class='row'>
+                    {% if hotel %}
+                    <div class="col-6">
+                        <h4>Hotel</h4>
+                        <h5 class="text-left">{{hotel.name}}</h5>
+                        <p class="text-left">{{hotel.address}}</p>
+                    </div>
+                    <div class='col-6'>
+                        <h4>Price</h4>
+                        <h5>${{hotel.price|floatformat:2}}</h5>
+                    </div>
+                    {% else %}
+                    <div class='col-12 text-center'>
+                        <form action="/{{trip.id}}/{{depart_flight.destination}}/hotels/" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="budget" value="{{trip.budget}}">
+                            <input type="submit" value="Add Hotel" class="btn btn-light">
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <div class="row">
+                    <div class="col-4">
+                        <h4>Budget</h4>
+                        <h5>${{trip.budget}}</h5>
+                    </div>
+                    <div class="col-4">
+                        <h4>Current Total</h4>
+                        {%if not return_flight and not hotel%}
+                        <h5> ${{depart_flight.price|floatformat:2}}</h5>
+                        {%endif%}
+                        {%if return_flight and not hotel%}
+                        <h5> ${{depart_flight.price|add:return_flight.price|floatformat:2}}</h5>
+                        {%endif%}
+                        {%if return_flight and hotel %}
+                        <h5>${{depart_flight.price|add:return_flight.price|add:hotel.price|floatformat:2}}</h5>
+                        {%endif%}
+                    </div>
+                    <div class="col-4">
+                        <h4>Remaining Balance</h4>
+                        {%if not return_flight and not hotel%}
+                        <h5> ${{trip.budget|sub:depart_flight.price|floatformat:2}}</h5>
+                        {%endif%}
+                        {%if return_flight and not hotel%}
+                        <h5> ${{trip.budget|sub:depart_flight.price|sub:return_flight.price|floatformat:2}}</h5>
+                        {%endif%}
+                        {%if return_flight and hotel %}
+                        <h5>${{trip.budget|sub:depart_flight.price|sub:return_flight.price|sub:hotel.price|floatformat:2}}
+                        </h5>
+                        {%endif%}
+                    </div>
+                </div>
+                <a href="{% url 'delete_trip' trip.id depart_flight.origin %}" class="btn btn-light col-12">Delete
+                    Trip</a>
+                <a href="{% url 'edit_trip' trip.id depart_flight.origin%}" class="btn btn-light col-12">Edit Trip</a>
             </div>
-            <!-- {% else %}
-    <form action="/{{trip.id}}/{{trip.origin}}/flights/" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="budget" value="{{trip.budget}}">
-        <input type="hidden" name="departure_date" value="{{trip.departure_date}}">
-        <input type="submit" value="Add Departing Flight" class="btn btn-primary">
-    </form> 
-    {% endif %} -->
-            <br>
-            <hr>
-            <div class="row">
-                <div class="col-4">
-                    <h4>Budget</h4>
-                    <h5>${{trip.budget}}</h5>
-                </div>
-                <div class="col-4">
-                    <h4>Current Total</h4>
-                    {%if not return_flight and not hotel%}
-                    <h5> ${{depart_flight.price|floatformat:2}}</h5>
-                    {%endif%}
-                    {%if return_flight and not hotel%}
-                    <h5> ${{depart_flight.price|add:return_flight.price|floatformat:2}}</h5>
-                    {%endif%}
-                    {%if return_flight and hotel %}
-                    <h5>${{depart_flight.price|add:return_flight.price|add:hotel.price|floatformat:2}}</h5>
-                    {%endif%}
-                </div>
-                <div class="col-4">
-                    <h4>Remaining Balance</h4>
-                    {%if not return_flight and not hotel%}
-                    <h5> ${{trip.budget|sub:depart_flight.price|floatformat:2}}</h5>
-                    {%endif%}
-                    {%if return_flight and not hotel%}
-                    <h5> ${{trip.budget|sub:depart_flight.price|sub:return_flight.price|floatformat:2}}</h5>
-                    {%endif%}
-                    {%if return_flight and hotel %}
-                    <h5>${{trip.budget|sub:depart_flight.price|sub:return_flight.price|sub:hotel.price|floatformat:2}}
-                    </h5>
-                    {%endif%}
-                </div>
-            </div>
-            <a href="{% url 'delete_trip' trip.id depart_flight.origin %}" class="btn btn-light col-12">Delete Trip</a>
-            <a href="{% url 'edit_trip' trip.id depart_flight.origin%}" class="btn btn-light col-12">Edit Trip</a>
         </div>
-    </div>
-    <div class = "col-4">
-        <h4 class = 'text-center'>Get Packing!</h4>
-        {% if trip_days != None %}
-        <h4 class = 'text-center'>{{trip_days}} Days & {{trip_nights}} Nights</h4>
-        {% endif %}
-        <p class = 'card-header text-center'> Clothes </p>
-        <ul>
+        <div class="col-4">
+            <h4 class='text-center'>Get Packing!</h4>
             {% if trip_days != None %}
-                <li>{{total_tops}} tops</li>
-                <li>{{total_bottoms}} bottoms</li>
-                <li>{{total_socks}} socks</li>
-                <li>{{total_undergarments}} undergarments</li>
-                {% for item in user.suitcase_set.all %}
+            <h4 class='text-center'>{{trip_days}} Days & {{trip_nights}} Nights</h4>
+            {% endif %}
+            <p class='card-header text-center'> Clothes </p>
+            <ul>
+                {% if trip_days != None %}
+                    <li>{{total_tops}} tops</li>
+                    <li>{{total_bottoms}} bottoms</li>
+                    <li>{{total_socks}} socks</li>
+                    <li>{{total_undergarments}} undergarments</li>
+                    {% for item in user.suitcase_set.all %}
                     {% if item.quantity != 0%}
-                    <li>{{item.quantity}} {{item.item_name}}</li><a class = "btn btn-light" href = "{% url 'add_luggage_quantity' trip.id trip.origin item.id %}">+</a><a class = 'btn btn-light' href = "{% url 'subtract_luggage_quantity' trip.id trip.origin item.id %}">-</a>
-                {% endif %}
-                {% endfor %}
+                        <li>{{item.quantity}} {{item.item_name}}</li><a class="btn btn-light"
+                            href="{% url 'add_luggage_quantity' trip.id trip.origin item.id %}">+</a><a class='btn btn-light'
+                            href="{% url 'subtract_luggage_quantity' trip.id trip.origin item.id %}">-</a>
+                    {% endif %}
+                    {% endfor %}
                 <form action="/trips/{{trip.id}}/{{trip.origin}}/add_luggage_items/" method="POST">
                     {% csrf_token %}
                     {{luggage_form.as_p}}
                     <input type="submit" value="Add Items">
                 </form>
-            {% else %}
+                {% else %}
                 <p>Add a Return Flight to generate a suggested clothing packing list!</p>
-            {% endif %}
-        </ul>
-        <p class = 'card-header text-center'>Toiletries</p>
-        <ul>
-            <li>Toothbrush</li>
-            <li>Toothpaste</li>
-            <li>Floss</li>
-            <li>Face wash</li>
-            <li>Shampoo</li>
-            <li>Conditioner</li>
-            <li>Body wash</li>
-            <li>Deodorant</li>
-            <li>Razor</li>
-            <li>Lotion</li>
-            <li>Medications</li>
-        </ul>
-        <p class = 'card-header text-center'>For the Plane</p>
-        <ul>
-            <li>Driver's License</li>
-            <li>Passport</li>
-            <li>Wallet</li>
-            <li>Laptop + charger</li>
-            <li>Phone + charger</li>
-            <li>Tablet + charger</li>
-            <li>Headphones</li>
-            <li>Pillow</li>
-        </ul>
+                {% endif %}
+            </ul>
+            <p class='card-header text-center'>Toiletries</p>
+            <ul>
+                <li>Toothbrush</li>
+                <li>Toothpaste</li>
+                <li>Floss</li>
+                <li>Face wash</li>
+                <li>Shampoo</li>
+                <li>Conditioner</li>
+                <li>Body wash</li>
+                <li>Deodorant</li>
+                <li>Razor</li>
+                <li>Lotion</li>
+                <li>Medications</li>
+            </ul>
+            <p class='card-header text-center'>For the Plane</p>
+            <ul>
+                <li>Driver's License</li>
+                <li>Passport</li>
+                <li>Wallet</li>
+                <li>Laptop + charger</li>
+                <li>Phone + charger</li>
+                <li>Tablet + charger</li>
+                <li>Headphones</li>
+                <li>Pillow</li>
+            </ul>
+        </div>
     </div>
-</div>
 
 
     {% endblock %}
     {% block footer %}
-    <div class="card-footer text-muted">
-        {% endblock %}
+    <div id = "home-footer" class="card-footer text-muted">
+    {% endblock %}
