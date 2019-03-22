@@ -7,11 +7,12 @@
 {% block content %}
 {%for i in iata%}
     {%if i.code == airport_code %}
-        <h2 class="card-header text-center">Flights to {{i.name}}</h2>
+        <h2 class="card-header special-header larger-font text-center">Flights to {{i.name}}</h2>
     {%endif%}
 {%endfor%}
+<div class = "row offset-1">
 {% for f in flights%}
-<div class="card col-6 offset-md-3">
+<div class="card col-5">
     <div class="card-body">
         <div class = 'row'>
             <div class = 'col-6'>
@@ -45,8 +46,9 @@
         </form>  
     </div>
 </div>
-
 {% endfor %}
+</div>
+
 {% endblock %}
 
 {% block footer %}

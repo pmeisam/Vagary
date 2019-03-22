@@ -10,6 +10,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth import authenticate, login
 import os
 import requests
+import random
 from datetime import datetime, date
 from .models import Trip, Hotel, Flight, User, Suitcase
 from .forms import LuggageForm
@@ -76,7 +77,7 @@ def destinations(request):
         'budget': budget, 'origin': origin, 
         'departure_date':d_date, 
         "trip": trip,
-        'iata': res
+        'iata': res       
         })
     except: 
         return render (request, 'error.html')
@@ -131,6 +132,7 @@ def flight_add(request, trip_id, airport_code):
         origin = origin,
         trip = trip,
         )
+
     if trip.origin == airport_code:
         return redirect(f'/trips/{trip.id}/{airport_code}')
     else: 

@@ -1,22 +1,29 @@
 {% extends 'base.html' %}
 
 {% block body%}
-<body>
+<body class = "bg-image">
 {% endblock %}
 
 {% block content %}
 
-<form action="" method="post">
+<br><br><br><br><br><br>
 
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit!" class="btn btn-primary">
-</form>
+<div class = "col-6 offset-3">
+    <div class = "card text-center">
+        <h3 class = "card-header">Need to make some changes?</h3>
+        <br>
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Submit!" class="btn btn-light">
+        </form>
+    </div>
+</div>
 
 {% endblock %}
 
 {% block footer %}
-    <div id = "home-footer" class="card-footer text-muted">
+    <div class="home-footer card-footer text-muted">
 {% endblock %}

@@ -7,12 +7,17 @@
 {% endblock %}
 
 {% block content %}
-<h1>Uh oh!</h1>
-<p>Sadly that airport isn't available yet. Please try a different departure airport!</p>
-<h3>Happy Travels!</h3>
+<div class = "card col-6 offset-3">
+    <br>
+    <h2 class = "text-center special-header">Whoops!</h2>
+    <br>
+    <p>Sadly that airport isn't available yet. Please try a different departure airport!</p>
+    <h3 class = "text-center">Happy Travels!</h3>
 <a href = "/" class = "btn btn-light">Try Again</a>
+</div>
+
 {% endblock %}
 
 {% block footer %}
-    <div id = "home-footer" class="card-footer text-muted">
+    <div class=" home-footer card-footer text-muted">
 {% endblock %}

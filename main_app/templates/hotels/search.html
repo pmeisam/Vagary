@@ -5,8 +5,13 @@
 {% endblock %}
 
 {% block content %}
+{%for i in iata%}
+    {%if i.code == airport_code %}
+        <h2 class="card-header special-header larger-font text-center">Hotels in {{i.name}}</h2>
+    {%endif%}
+{%endfor%}
 {% for h in hotels %}
-<div class="card col-6 offset-md-3">
+<div class="card col-6 offset-3">
     <div class="card-body">
         <h4 class = "col-12 text-center">{{h.hotel.name}}</h4>
         <h5> <span> Price</span> ${{h.offers.0.price.total}} / per night</h5>    
@@ -29,5 +34,5 @@
 {% endblock %}
 
 {% block footer %}
-    <div class="card-footer text-muted">
+    <div class="home-footer card-footer text-muted">
 {% endblock %}

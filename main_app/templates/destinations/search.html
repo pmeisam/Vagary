@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block body%}
-<body>
+<body class = "bg-image">
 {% endblock %}
 
 {% block content %}
-
+<br>
+<h4 class = "text-center special-header larger-font" >Where are you headed?!</h4>
+<h5 class = "text-center"><i>Click on a destination to view flights!</i></h5>
+<div class = "row offset-2">
 {% for d in destinations %}
-<div class="card col-6 offset-md-3">
-    <div class="card-body text-center">
+    <div class="col-3">
         {%for i in iata%}
         {%if i.code == d.destination %}
-        <h4 class = "card-header search-header">{{i.name}} ({{d.destination}})</h4>
-        {%endif%}
-        {%endfor%}
         <form action="/{{trip.id}}/{{d.destination}}/flights/" method="POST">
             {% csrf_token %}
             <input type="hidden" name="budget" value="{{budget}}">
             <input type="hidden" name="origin" value="{{origin}}">
             <input type="hidden" name="destination_estimate" value="{{d.price.total}}">
             <input type="hidden" name="departure_date" value="{{d.departureDate}}">
-            <input type="submit" value="Search flights as low as ${{d.price.total}}" class="btn btn-primary">
+            <input type="submit" value="{{i.name}} ({{d.destination}})" class="btn btn-light text-center">
         </form>
     </div>
-</div>
-
+        {%endif%}
+        {%endfor%}
 {% endfor %}
-
+</div>
 
 {% endblock %}
 

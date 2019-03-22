@@ -1,23 +1,28 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
 {% block body%}
-<body>
+<body class = "bg-image">
 {% endblock %}
+
 {% block content %}
+<br><br><br><br>
+<div class = "card col-6 offset-3">
 <div style="width: 50%; margin: 0 auto;">
-
-
-    <i class="fa fa-vcard-o" style="font-size:48px;color:green"></i>
+    <i class="fa fa-vcard-o" style="font-size:48px;"></i>
 
 {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
 
 <form method="post" action="{% url 'signup' %}">
   {% csrf_token %}
   {{ form|crispy }}
-  <input type="submit" class="btn btn-outline-success" value="Sign Up">
+  <input type="submit" class="btn btn-light" value="Sign Up">
 </form>
 </div>
+</div>
+
 {% endblock %}
+
 {% block footer %}
-    <div class="card-footer text-muted">
+    <div class="card-footer home-footer text-muted">
 {% endblock %}
